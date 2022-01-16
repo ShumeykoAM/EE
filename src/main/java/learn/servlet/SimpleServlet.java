@@ -2,12 +2,10 @@ package learn.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 @WebServlet("/servlet/annotatedSimpleServlet")
 public class SimpleServlet extends HttpServlet
@@ -24,7 +22,10 @@ public class SimpleServlet extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		Integer count = 1;
+		HttpSession session =request.getSession(true);
+		Integer sessionCounter = Optional.ofNullable((Integer)session.getAttribute("SessionCounter")).orElse(1);
+
+		int count = 1;
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : (cookies != null ? cookies : COOKIES_EMPTY_ARRAY))
 			if ("counter".equals(cookie.getName()))
@@ -32,10 +33,13 @@ public class SimpleServlet extends HttpServlet
 
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		out.println("<h1>" + String.format("Hello, it is your %s visit.", count) + "</h1>");
+		out.println("<h1>" + String.format("Hello, according to the cookies, it is your %s visit.", count) + "</h1></br>");
+		out.println("<h1>" + String.format("Session counter %d.", sessionCounter) + "</h1>");
+
+		session.setAttribute("SessionCounter", ++sessionCounter);
 
 		//Создаем куку
-		Cookie cookie = new Cookie("counter", count.toString());
+		Cookie cookie = new Cookie("counter", Integer.toString(count));
 		//Максимальное время жизни куки
 		cookie.setMaxAge(5);
 
