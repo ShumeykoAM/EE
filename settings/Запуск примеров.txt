@@ -1,0 +1,8 @@
+Консоль админа GlassFish
+    http://localhost:4848/
+
+Запуск сервлета сконфигурированного в web.xml
+    http://localhost:8080/GlassFishApp/servlet/webXmlSimpleServlet
+
+Запуск сервлета сконфигурированного через аннотацию
+    http://localhost:8080/GlassFishApp/servlet/annotatedSimpleServlet

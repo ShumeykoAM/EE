@@ -1,0 +1,10 @@
+Находим в glassfish файлы:
+    glassfish\domains\(домен который запускаем)\config\domain.xml
+    glassfish\domains\(домен который запускаем)\config\domain.jvm-options-IDEA.xml
+и в строках содержащих "debug-options" выставляем параметр server=n.
+
+Возможно еще с параметром suspend надо будет поколдовать, в них же и порты, используемые для отладки, можно подправить, но работало и без этого.
+
+Для ручного старта и стопа сервака нужно выполнить команды
+asadmin start-domain domain1
+asadmin stop-domain domain1
