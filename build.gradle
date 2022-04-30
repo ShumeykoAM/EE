@@ -11,6 +11,13 @@ repositories {
 }
 
 dependencies {
+    def lombok = 'org.projectlombok:lombok:1.18.16'
+    compileOnly lombok
+    annotationProcessor lombok
+
+    testCompileOnly lombok
+    testAnnotationProcessor lombok
+
     implementation group: 'org.springframework', name: 'spring-core', version: '5.2.21.RELEASE'
     implementation group: 'org.springframework', name: 'spring-beans', version: '5.2.21.RELEASE'
     implementation group: 'org.springframework', name: 'spring-context', version: '5.2.21.RELEASE'
