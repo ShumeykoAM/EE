@@ -1,31 +1,41 @@
 plugins {
-    id 'java'
-    id 'idea'
+	id 'org.springframework.boot' version '2.6.7'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'idea'
 }
 
-group 'ru.learn'
+group 'kot.learn.spring'
 version '1.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    def lombok = 'org.projectlombok:lombok:1.18.16'
-    compileOnly lombok
-    annotationProcessor lombok
+	def lombok = 'org.projectlombok:lombok:1.18.24'
+	compileOnly lombok
+	annotationProcessor lombok
 
-    testCompileOnly lombok
-    testAnnotationProcessor lombok
+	testCompileOnly lombok
+	testAnnotationProcessor lombok
 
-    implementation group: 'org.springframework', name: 'spring-core', version: '5.2.21.RELEASE'
-    implementation group: 'org.springframework', name: 'spring-beans', version: '5.2.21.RELEASE'
-    implementation group: 'org.springframework', name: 'spring-context', version: '5.2.21.RELEASE'
+	//compileOnly "org.springframework.boot:spring-boot-configuration-processor" что то и без нее работает
+	implementation 'org.springframework.boot:spring-boot-starter-jetty'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-integration'
+	implementation 'org.springframework.boot:spring-boot-starter-artemis'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+	implementation 'org.springframework:spring-jms'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.integration:spring-integration-test'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
