@@ -1,0 +1,14 @@
+spring:
+  artemis:
+    broker-url: tcp://localhost:60606
+    user: artemisUser
+    password: artemisPassword
+  jms:
+    template:
+      default-destination: tacocloud.order.queue
+#  mvc:
+#    static-path-pattern: /**
+server:
+  port: 8081
+data:
+  server: from application.yml

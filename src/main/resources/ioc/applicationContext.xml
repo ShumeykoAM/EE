@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <import resource="additionalBeans.xml"/>
+
+    <bean id="testBean" name="alias1 alias2,alias3;alias4"
+          class="ru.learn.spring.ioc.other.TestBean">
+        <!--Опасно, так как имя параметра после компиляции может быть другим то нужно страховаться аннотацией @ConstructorProperties,
+            или использовать type or index если не получается обойтись без уточнений-->
+        <constructor-arg name="realName" value="Neil"/>
+        <constructor-arg name="realAdditionalClass" ref="add"/>
+    </bean>
+
+    <alias name="testBean" alias="alias5"/>
+
+    <bean id="innerStatic1" class="ru.learn.spring.ioc.other.OuterClass$InnerClass"/>
+    <bean id="innerStatic2" class="ru.learn.spring.ioc.other.OuterClass.InnerClass"/>
+
+    <bean id="fromFactoryMethod" class="ru.learn.spring.ioc.other.TestBean"
+          factory-method="createInstance"/>
+
+    <bean id="factory" class="ru.learn.spring.ioc.other.FactoryBeans"/>
+    <bean id="fromAbstractFactory" class="ru.learn.spring.ioc.other.TestBean"
+          factory-bean="factory"
+          factory-method="createTestBeanInstance"/>
+
+    <bean id="movieListener" class="ru.learn.spring.ioc.other.SimpleMovieLister">
+        <property name="movieFinder" value="someMovieFinder"/>
+        <aop:scoped-proxy/>
+    </bean>
+
+    <!--Циклические зависимости через setter'ы можно, через конструктор нельзя-->
+    <bean id="node1" class="ru.learn.spring.ioc.other.Node">
+        <property name="node" ref="node2"/>
+    </bean>
+    <bean id="node2" class="ru.learn.spring.ioc.other.Node">
+        <property name="node" ref="node1"/>
+    </bean>
+
+    <!--прототипы-->
+    <bean id="command" class="ru.learn.spring.ioc.other.CommandManager$Command" scope="prototype"/>
+    <bean id="commandManager" class="ru.learn.spring.ioc.other.CommandManager">
+        <lookup-method name="createCommand" bean="command"/>
+    </bean>
+
+    <!--регистрируем кастомный скоуп, в данном случае скоуп, который присутствует в спринг но по умолчанию недоступен-->
+    <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="thread">
+                    <bean class="org.springframework.context.support.SimpleThreadScope"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="threadBean" class="ru.learn.spring.ioc.other.CommandManager$Command" scope="thread"/>
+
+</beans>
