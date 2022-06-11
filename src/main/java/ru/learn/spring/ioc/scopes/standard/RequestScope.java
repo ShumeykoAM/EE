@@ -8,6 +8,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import ru.learn.spring.ioc.scopes.custom.IMyOwnScope;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 /**
  * Объект живущий в рамках одного http запроса, его можно инжектить в синглтоны и бины с другими скоупами
  *
@@ -43,6 +46,18 @@ public abstract class RequestScope
 	{
 		int i = getPrototypeScopeBean().getCounter();
 		return currentCounter + ":" + i;
+	}
+
+	@PostConstruct
+	public void postConstruct()
+	{
+		System.out.println("postConstruct");
+	}
+
+	@PreDestroy
+	public void preDestroy()
+	{
+		System.out.println("preDestroy");
 	}
 
 	@Lookup
