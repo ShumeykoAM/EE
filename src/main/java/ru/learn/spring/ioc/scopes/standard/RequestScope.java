@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import ru.learn.spring.ioc.factory.bean.MessageDigestFactoryBean;
 import ru.learn.spring.ioc.scopes.custom.IMyOwnScope;
 
 import java.security.MessageDigest;
@@ -44,6 +45,11 @@ public abstract class RequestScope
 	@Qualifier("messageDigestMD5")
 	private MessageDigest messageDigest;
 
+	//Что бы получить бин самой фабрики, нужно добавить &
+	@Autowired
+	@Qualifier("&messageDigestMD5")
+	private MessageDigestFactoryBean messageDigestFactoryBean;
+
 	public RequestScope()
 	{
 		counter++;
@@ -58,9 +64,11 @@ public abstract class RequestScope
 	}
 
 	@PostConstruct
-	public void postConstruct()
+	public void postConstruct() throws Exception
 	{
 		System.out.println("postConstruct");
+		boolean isEqual = messageDigestFactoryBean.getObject().equals(messageDigest);
+		isEqual = false;
 	}
 
 	@PreDestroy
