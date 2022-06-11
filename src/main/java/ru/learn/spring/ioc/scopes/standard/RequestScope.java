@@ -3,11 +3,13 @@ package ru.learn.spring.ioc.scopes.standard;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import ru.learn.spring.ioc.scopes.custom.IMyOwnScope;
 
+import java.security.MessageDigest;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -34,6 +36,13 @@ public abstract class RequestScope
 
 	@Autowired
 	private IMyOwnScope myOwnScope;
+
+	@Autowired
+	private MessageDigest messageDigestSHA1;
+
+	@Autowired
+	@Qualifier("messageDigestMD5")
+	private MessageDigest messageDigest;
 
 	public RequestScope()
 	{
