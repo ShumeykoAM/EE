@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.learn.spring.ioc.events.TypeOneEvent;
 import ru.learn.spring.ioc.events.TypeTwoEvent;
 import ru.learn.spring.ioc.scopes.standard.SingletonScope;
+import ru.learn.spring.resources.ExampleWorkWithResources;
 
 /**
  * Пример потокобезопасного инъектирования бинов живущих только во время запроса или только во время сесии в постоянно живущие (singleton) бины
+ * и другие примеры
  *
+ * http://localhost:8081/ в браузере
  * @since 23.10.2021
  */
 @RestController
@@ -22,12 +25,17 @@ public class SomeRest
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
+	@Autowired
+	private ExampleWorkWithResources exampleWorkWithResources;
+
 	@GetMapping(path = "/")
 	String helloWorld()
 	{
 		//Публикуем парочку событий, будут обработаны в соответствующих слушателях
 		publisher.publishEvent(new TypeOneEvent("one"));
 		publisher.publishEvent(new TypeTwoEvent("two"));
+
+		exampleWorkWithResources.work();
 
 		return "Если объект синглтона не 1, то это какой то косяк, номер объекта: " + singletonScope.getCurrentCounter() + "<br/>"
 			+ "номер объекта сессии: " + singletonScope.getSessionScope().getCurrentCounter()
@@ -37,6 +45,4 @@ public class SomeRest
 			+ "номер объекта запроса: " + singletonScope.getRequestScope().getCurrentCounter()
 			+ " в него заинжектен объект сессии номер: " + singletonScope.getRequestScope().getSessionScope().getCurrentCounter();
 	}
-
-
 }
