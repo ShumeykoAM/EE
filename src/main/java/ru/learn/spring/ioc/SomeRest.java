@@ -1,8 +1,11 @@
-package ru.learn.spring.ioc.scopes;
+package ru.learn.spring.ioc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.learn.spring.ioc.events.TypeOneEvent;
+import ru.learn.spring.ioc.events.TypeTwoEvent;
 import ru.learn.spring.ioc.scopes.standard.SingletonScope;
 
 /**
@@ -16,9 +19,16 @@ public class SomeRest
 	@Autowired
 	private SingletonScope singletonScope;
 
+	@Autowired
+	private ApplicationEventPublisher publisher;
+
 	@GetMapping(path = "/")
 	String helloWorld()
 	{
+		//Публикуем парочку событий, будут обработаны в соответствующих слушателях
+		publisher.publishEvent(new TypeOneEvent("one"));
+		publisher.publishEvent(new TypeTwoEvent("two"));
+
 		return "Если объект синглтона не 1, то это какой то косяк, номер объекта: " + singletonScope.getCurrentCounter() + "<br/>"
 			+ "номер объекта сессии: " + singletonScope.getSessionScope().getCurrentCounter()
 			+ " в него заинжектен объект запроса номер: " + singletonScope.getSessionScope().getRequestScope().getCurrentCounter()
