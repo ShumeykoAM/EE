@@ -1,6 +1,7 @@
 package ru.learn.spring.ioc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,10 @@ public class SomeRest
 
 	@Autowired
 	private ExampleWorkWithResources exampleWorkWithResources;
+
+	@Autowired
+	@Qualifier("kotsName")
+	private String kotsName;
 
 	@GetMapping(path = "/")
 	String helloWorld()
